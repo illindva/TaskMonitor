@@ -1,0 +1,49 @@
+/* General Styles */
+body {
+    background-color: #f8f9fa;
+}
+
+h3 {
+    margin-top: 0;
+}
+
+/* Log Console Styles */
+.log-console {
+    background-color: #000;
+    color: #fff;
+    padding: 10px;
+    height: 400px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-family: monospace;
+}
+
+pre {
+    white-space: pre-wrap; /* Allows the text to wrap */
+    word-wrap: break-word; /* Prevents long words from overflowing */
+}
+
+/* Button Styles */
+.btn {
+    margin-right: 5px;
+}
+
+/* Alert Styles */
+.alert {
+    margin-top: 20px;
+}
+
+table th {
+    white-space: nowrap; /* Prevent text from wrapping to new lines */
+    overflow: hidden;    /* Hide excessive text */
+    text-overflow: ellipsis; /* Add ellipsis (...) for overflowing text */
+    max-width: 200px; /* Optional: Limit cell width */
+}
+
+table td {
+    white-space: nowrap; /* Prevent text from wrapping to new lines */
+    overflow: hidden;    /* Hide excessive text */
+    text-overflow: ellipsis; /* Add ellipsis (...) for overflowing text */
+    max-width: 200px; /* Optional: Limit cell width */
+}

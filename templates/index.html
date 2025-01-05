@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <!-- Scheduled Tasks Section -->
+    <div class="col-md-6 mb-4">
+        <h3>Scheduled Tasks</h3>
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>Task Name</th>
+                    <th>Start Time (UTC)</th>
+                    <th>Day Frequency</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for task in scheduled_tasks %}
+                <tr>
+                    <td>{{ task.task_name }}</td>
+                    <td>{{ task.start_time.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                    <td>{{ task.day_frequency }}</td>
+                    <td>
+                        <a href="{{ url_for('update_task', task_id=task.id) }}" class="btn btn-sm btn-success">Complete</a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="4" class="text-center">No scheduled tasks.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="mt-2">
+            <a href="{{ url_for('export_tasks', task_type='scheduled') }}" class="btn btn-primary">Export</a>
+            <button class="btn btn-secondary" onclick="location.reload();">Refresh</button>
+        </div>
+    </div>
+
+    <!-- Completed Tasks Section -->
+    <div class="col-md-6 mb-4">
+        <h3>Completed Tasks</h3>
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>Task Name</th>
+                    <th>Start Time (UTC)</th>
+                    <th>Day Frequency</th>
+                    <th>Is Completed</th>
+                    <th>Date Completed (UTC)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for task in completed_tasks %}
+                <tr>
+                    <td>{{ task.task_name }}</td>
+                    <td>{{ task.start_time.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                    <td>{{ task.day_frequency }}</td>
+                    <td>{{ 'Yes' if task.is_completed else 'No' }}</td>
+                    <td>{{ task.date_completed.strftime('%Y-%m-%d %H:%M:%S') if task.date_completed else 'N/A' }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="5" class="text-center">No completed tasks.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="mt-2">
+            <a href="{{ url_for('export_tasks', task_type='completed') }}" class="btn btn-primary">Export</a>
+            <button class="btn btn-secondary" onclick="location.reload();">Refresh</button>
+        </div>
+    </div>
+
+    <!-- Live-updating Log Console Section -->
+    <div class="col-md-12 mb-4">
+        <h3>Log Console</h3>
+        <div class="log-console"
+             id="logContentWrapper"
+             style="height: 300px; overflow-y: scroll; border: 1px solid #ddd; padding: 10px; background: black;">
+            <pre id="logContent">{{ logs }}</pre>
+        </div>
+        <div class="mt-2">
+            <button class="btn btn-secondary" onclick="refreshLogs();">Refresh Logs</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Function to fetch logs and ensure the latest logs are at the top
+function refreshLogs() {
+    fetch('{{ url_for("get_logs") }}')
+    .then(response => response.text())
+    .then(data => {
+        // Update the log content
+        const logContent = document.getElementById('logContent');
+        logContent.textContent = data;
+
+        // Ensure scrollbar stays at the top
+        const logWrapper = document.getElementById('logContentWrapper');
+        logWrapper.scrollTop = 0;
+    })
+    .catch(error => console.error('Error fetching logs:', error));
+}
+
+// Auto-refresh logs every 60 seconds
+setInterval(refreshLogs, 60000);
+
+// Keep logs ordered when interacting with the page (initial setup of logs)
+document.addEventListener('DOMContentLoaded', function () {
+    const logWrapper = document.getElementById('logContentWrapper');
+    logWrapper.scrollTop = 0; // Always scroll to the top after the page loads
+});
+</script>
+{% endblock %}

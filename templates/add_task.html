@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <h3>Add New Task</h3>
+        <form method="post">
+            {{ form.hidden_tag() }}
+
+            <!-- Task Name -->
+            <div class="mb-3">
+                {{ form.task_name.label(class="form-label") }}
+                {{ form.task_name(class="form-control") }}
+            </div>
+
+            <!-- Call This -->
+            <div class="mb-3">
+                {{ form.call_this.label(class="form-label") }}
+                {{ form.call_this(class="form-control") }}
+            </div>
+
+            <!-- Start Time -->
+            <div class="mb-3">
+                {{ form.start_time.label(class="form-label") }}
+                {{ form.start_time(class="form-control") }}
+            </div>
+
+            <!-- End Time -->
+            <div class="mb-3">
+                {{ form.end_time.label(class="form-label") }}
+                {{ form.end_time(class="form-control") }}
+            </div>
+
+            <!-- Time Zone -->
+            <div class="mb-3">
+                {{ form.timezone.label(class="form-label") }}
+                {{ form.timezone(class="form-select") }}
+            </div>
+
+            <!-- Day Frequency -->
+            <div class="mb-3">
+                {{ form.day_frequency.label(class="form-label") }}
+                {{ form.day_frequency(class="form-select", multiple=True) }}
+                <small class="text-muted">Hold Ctrl or Cmd (Mac) key to select multiple days.</small>
+            </div>
+
+            <!-- Submit Button -->
+            {{ form.submit(class="btn btn-primary") }}
+        </form>
+    </div>
+</div>
+{% endblock %}
